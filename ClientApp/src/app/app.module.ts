@@ -28,7 +28,7 @@ import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'vehicle-form', component: VehicleFormComponent },
+      { path: 'vehicles/new', component: VehicleFormComponent },
     ])
   ],
   providers: [],
