@@ -14,7 +14,7 @@ namespace vega.Mapping
             CreateMap<Make, MakeResource>();
             CreateMap<Model, ModelResource>();
             CreateMap<Feature, FeatureResource>();
-            CreateMap<Vehicle, VehicleResource>()
+            CreateMap<Vehicle, SaveVehicleResource>()
                 .ForMember(
                     vehicleResource => vehicleResource.ContactResource, 
                     opt => opt.MapFrom(
@@ -35,7 +35,7 @@ namespace vega.Mapping
                 );
 
             //API Resource to Domain
-            CreateMap<VehicleResource, Vehicle>()
+            CreateMap<SaveVehicleResource, Vehicle>()
                 .ForMember(
                     vehicle => vehicle.Id,
                     opt => opt.Ignore()
