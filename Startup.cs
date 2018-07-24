@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using vega.Persistence;
+using vega.Core;
 using AutoMapper;
 
 namespace vega

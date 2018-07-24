@@ -1,6 +1,6 @@
 using AutoMapper;
 using vega.Controllers.Resources;
-using vega.Models;
+using vega.Core.Models;
 using System.Linq;
 using System.Collections.Generic;
 
