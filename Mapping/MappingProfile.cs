@@ -16,6 +16,25 @@ namespace vega.Mapping
             CreateMap<Feature, FeatureResource>();
             CreateMap<Vehicle, SaveVehicleResource>()
                 .ForMember(
+                    saveVehicleResource => saveVehicleResource.ContactResource, 
+                    opt => opt.MapFrom(
+                        vehicle => new ContactResource{ 
+                            Name = vehicle.ContactName,
+                            Phone = vehicle.ContactPhone,
+                            Email = vehicle.ContactEmail 
+                        }
+                    )
+                )
+                .ForMember(
+                    saveVehicleResource => saveVehicleResource.VehicleFeatureIds,
+                    opt => opt.MapFrom(
+                        vehicle => vehicle.VehicleFeatures.Select(
+                            vehicleFeature => vehicleFeature.FeatureId
+                        )
+                    )
+                );
+            CreateMap<Vehicle, VehicleResource>()
+                .ForMember(
                     vehicleResource => vehicleResource.ContactResource, 
                     opt => opt.MapFrom(
                         vehicle => new ContactResource{ 
@@ -26,10 +45,13 @@ namespace vega.Mapping
                     )
                 )
                 .ForMember(
-                    vehicleResource => vehicleResource.VehicleFeatureIds,
+                    vehicleResource => vehicleResource.FeatureResources,
                     opt => opt.MapFrom(
                         vehicle => vehicle.VehicleFeatures.Select(
-                            vehicleFeature => vehicleFeature.FeatureId
+                            vehicleFeature => new FeatureResource{
+                                Id = vehicleFeature.Feature.Id,
+                                Name = vehicleFeature.Feature.Name
+                            }
                         )
                     )
                 );
