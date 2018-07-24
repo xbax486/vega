@@ -48,22 +48,19 @@ namespace vega.Controllers
         public async Task<IActionResult> UpdateVehicle(int id, [FromBody] SaveVehicleResource vehicleResource)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var vehicle = await repository.GetVehicle(id);
 
             if (vehicle == null)
-            {
                 return NotFound();
-            }
 
             mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource, vehicle);
             vehicle.LastUpdated = DateTime.Now;
 
             await unitOfWork.CompleteAsync();
-
+            // return a vehicle with full details 
+            vehicle = await repository.GetVehicle(vehicle.Id);
             var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
             return Ok(result);
