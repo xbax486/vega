@@ -35,6 +35,18 @@ namespace vega.Mapping
                 );
             CreateMap<Vehicle, VehicleResource>()
                 .ForMember(
+                    vehicleResource => vehicleResource.ModelResource,
+                    opt => opt.MapFrom(
+                        vehicle => vehicle.Model
+                    )
+                )
+                .ForMember(
+                    vehicleResource => vehicleResource.MakeResource,
+                    opt => opt.MapFrom(
+                        vehicle => vehicle.Model.Make
+                    )
+                )
+                .ForMember(
                     vehicleResource => vehicleResource.ContactResource, 
                     opt => opt.MapFrom(
                         vehicle => new ContactResource{ 

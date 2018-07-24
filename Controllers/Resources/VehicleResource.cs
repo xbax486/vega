@@ -10,6 +10,8 @@ namespace vega.Controllers.Resources
 
         public ModelResource ModelResource { get; set; }
 
+        public MakeResource MakeResource { get; set; }
+
         public bool IsRegistered { get; set; }
 
         public ContactResource ContactResource { get; set; }
