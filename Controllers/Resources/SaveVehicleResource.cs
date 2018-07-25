@@ -14,7 +14,7 @@ namespace vega.Controllers.Resources
         [Required]
         public ContactResource ContactResource { get; set; }
 
-        public ICollection<int>  VehicleFeatureIds { get; set; }
+        public ICollection<int> VehicleFeatureIds { get; set; }
 
         public SaveVehicleResource()
         {

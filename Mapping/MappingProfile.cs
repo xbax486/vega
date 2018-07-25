@@ -95,7 +95,8 @@ namespace vega.Mapping
                    (vehicleResource, vehicle) => {
                         /* Remove unselected features */
                         var removedFeatures = vehicle.VehicleFeatures
-                            .Where(f => !vehicleResource.VehicleFeatureIds.Contains(f.FeatureId));
+                            .Where(f => !vehicleResource.VehicleFeatureIds.Contains(f.FeatureId))
+                            .ToList();
                         foreach(var removedFeature in removedFeatures){
                             vehicle.VehicleFeatures.Remove(removedFeature);
                         }
@@ -103,7 +104,8 @@ namespace vega.Mapping
                         /* Add new features */
                         var addedFeatures = vehicleResource.VehicleFeatureIds
                             .Where(id => !vehicle.VehicleFeatures.Any(f => f.FeatureId == id))
-                            .Select(id => new VehicleFeature{ FeatureId = id });
+                            .Select(id => new VehicleFeature{ FeatureId = id })
+                            .ToList();
                         foreach(var feature in addedFeatures){
                             vehicle.VehicleFeatures.Add(feature);
                         }

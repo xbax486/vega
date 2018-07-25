@@ -6,6 +6,7 @@ import { forkJoin } from "rxjs/observable/forkJoin";
 import { SaveVehicle } from "../models/saveVehicle";
 import { Vehicle } from "../models/vehicle";
 import * as _ from "underscore";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -33,7 +34,8 @@ export class VehicleFormComponent implements OnInit {
   constructor(
     private vehicleService: VehicleService,
     private router: Router,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute, 
+    private toastrService: ToastrService) {
       this.activatedRoute.params.subscribe(param => {
         this.vehicle.id = +param['id']; 
       });
@@ -99,7 +101,20 @@ export class VehicleFormComponent implements OnInit {
   }
 
   submit() {
-    this.vehicleService.createVehicle(this.vehicle)
+    if(this.vehicle.id) {
+      this.vehicleService.updateVehicle(this.vehicle)
+        .subscribe(x => {
+          console.log(x);
+          
+          this.toastrService.success('Success', 'haha', {
+            closeButton: true,
+            timeOut: 5000
+          });
+        });
+    }
+    else {
+      this.vehicleService.createVehicle(this.vehicle)
       .subscribe(x => console.log(x));
+    }
   }
 }
