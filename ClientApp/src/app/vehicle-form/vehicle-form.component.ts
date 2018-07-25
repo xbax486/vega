@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { VehicleService } from '../services/vehicle.service';
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -17,12 +16,7 @@ export class VehicleFormComponent implements OnInit {
     contactResource: {}
   };
 
-  constructor(
-    private vehicleService: VehicleService, 
-    private toastsManager: ToastsManager, 
-    private vcr: ViewContainerRef) { 
-      this.toastsManager.setRootViewContainerRef(vcr);
-  }
+  constructor(private vehicleService: VehicleService) { }
 
   ngOnInit() {
     this.vehicleService.getMakes().subscribe((makes: any[]) => this.makes = makes);
@@ -50,16 +44,6 @@ export class VehicleFormComponent implements OnInit {
 
   submit() {
     this.vehicleService.createVehicle(this.vehicle)
-      .subscribe(
-        x => console.log(x), 
-        error => {
-          console.log(error);
-          
-          this.toastsManager.error(error.statusText, 'Error', {
-            showCloseButton: true,
-            toastLife: 5000
-          });
-        }
-      );
+      .subscribe(x => console.log(x));
   }
 }
