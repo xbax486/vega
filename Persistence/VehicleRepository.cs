@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using vega.Core.Models;
 using vega.Core;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace vega.Persistence
 {
@@ -15,14 +16,19 @@ namespace vega.Persistence
             this.context = context;
         }
 
-        public async Task<IEnumerable<Vehicle>> GetVehicles()
+        public async Task<IEnumerable<Vehicle>> GetVehicles(Filter filter)
         {
-            return await context.Vehicles
+            var query = context.Vehicles
                 .Include(v => v.Model)
                     .ThenInclude(m => m.Make)
                 .Include(v => v.VehicleFeatures)
                     .ThenInclude(vf => vf.Feature)
-                .ToListAsync();
+                .AsQueryable();
+
+            if(filter.MakeId.HasValue)
+                query = query.Where(v => v.Model.MakeId == filter.MakeId.Value);
+
+            return await query.ToListAsync();
         }
 
         public async Task<Vehicle> GetVehicle(int id, bool includeRelated = true) 
