@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using vega.Core.Models;
 using vega.Core;
+using System.Collections.Generic;
 
 namespace vega.Persistence
 {
@@ -13,6 +14,17 @@ namespace vega.Persistence
         {
             this.context = context;
         }
+
+        public async Task<IEnumerable<Vehicle>> GetVehicles()
+        {
+            return await context.Vehicles
+                .Include(v => v.Model)
+                    .ThenInclude(m => m.Make)
+                .Include(v => v.VehicleFeatures)
+                    .ThenInclude(vf => vf.Feature)
+                .ToListAsync();
+        }
+
         public async Task<Vehicle> GetVehicle(int id, bool includeRelated = true) 
         {
             if(!includeRelated)
