@@ -16,7 +16,7 @@ namespace vega.Persistence
             this.context = context;
         }
 
-        public async Task<IEnumerable<Vehicle>> GetVehicles(Filter filter)
+        public async Task<IEnumerable<Vehicle>> GetVehicles(VehicleQuery vehicleQuery)
         {
             var query = context.Vehicles
                 .Include(v => v.Model)
@@ -25,10 +25,10 @@ namespace vega.Persistence
                     .ThenInclude(vf => vf.Feature)
                 .AsQueryable();
 
-            if(filter.MakeId.HasValue)
-                query = query.Where(v => v.Model.MakeId == filter.MakeId.Value);
-            if(filter.ModelId.HasValue)
-                query = query.Where(v => v.ModelId == filter.ModelId.Value);
+            if(vehicleQuery.MakeId.HasValue)
+                query = query.Where(v => v.Model.MakeId == vehicleQuery.MakeId.Value);
+            if(vehicleQuery.ModelId.HasValue)
+                query = query.Where(v => v.ModelId == vehicleQuery.ModelId.Value);
 
             return await query.ToListAsync();
         }

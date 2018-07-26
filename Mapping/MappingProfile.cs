@@ -70,7 +70,7 @@ namespace vega.Mapping
                 );
 
             //API Resource to Domain
-            CreateMap<FilterResource, Filter>();
+            CreateMap<FilterResource, VehicleQuery>();
 
             CreateMap<SaveVehicleResource, Vehicle>()
                 .ForMember(
