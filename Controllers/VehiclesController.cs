@@ -25,9 +25,9 @@ namespace vega.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<VehicleResource>> GetVehicles(FilterResource filterResource) 
+        public async Task<IEnumerable<VehicleResource>> GetVehicles(VehicleQueryResource vehicleQueryResource) 
         {
-            var vehicleQuery = mapper.Map<FilterResource, VehicleQuery>(filterResource);
+            var vehicleQuery = mapper.Map<VehicleQueryResource, VehicleQuery>(vehicleQueryResource);
             var vehicles = await repository.GetVehicles(vehicleQuery);
             return mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleResource>>(vehicles);
         }
@@ -51,9 +51,7 @@ namespace vega.Controllers
         public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleResource vehicleResource)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var vehicle = mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource);
             vehicle.LastUpdated = DateTime.Now;
