@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class VehicleService {
+  private vehicleEndPoint = "/api/vehicles/";
 
   constructor(private http: HttpClient) { }
 
@@ -20,20 +21,32 @@ export class VehicleService {
     );
   }
 
-  createVehicle(vehicle) {
-    return this.http.post("/api/vehicles", vehicle).pipe(
+  getVehicles() {
+    return this.http.get(this.vehicleEndPoint).pipe(
       map(res => res)
     );
   }
 
   getVehicle(id) {
-    return this.http.get("/api/vehicles/" + id).pipe(
+    return this.http.get(this.vehicleEndPoint + id).pipe(
+      map(res => res)
+    );
+  }
+
+  createVehicle(vehicle) {
+    return this.http.post(this.vehicleEndPoint, vehicle).pipe(
       map(res => res)
     );
   }
 
   updateVehicle(vehicle: SaveVehicle) {
-    return this.http.put("/api/vehicles/" + vehicle.id, vehicle).pipe(
+    return this.http.put(this.vehicleEndPoint + vehicle.id, vehicle).pipe(
+      map(res => res)
+    );
+  }
+
+  deleteVehicle(id) {
+    return this.http.delete(this.vehicleEndPoint + id).pipe(
       map(res => res)
     );
   }

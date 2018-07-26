@@ -13,6 +13,7 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
+import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
 
 import { VehicleService } from './services/vehicle.service';
 
@@ -23,7 +24,8 @@ import { VehicleService } from './services/vehicle.service';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    VehicleFormComponent
+    VehicleFormComponent,
+    VehicleListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -37,6 +39,7 @@ import { VehicleService } from './services/vehicle.service';
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'vehicles/new', component: VehicleFormComponent },
       { path: 'vehicles/:id', component: VehicleFormComponent },
+      { path: 'vehicles', component: VehicleListComponent },
     ])
   ],
   providers: [
