@@ -37,7 +37,8 @@ export class VehicleFormComponent implements OnInit {
     private activatedRoute: ActivatedRoute, 
     private toastrService: ToastrService) {
       this.activatedRoute.params.subscribe(param => {
-        this.vehicle.id = +param['id']; 
+        let id = +param['id'];
+        this.vehicle.id = !isNaN(id) ? id : this.vehicle.id; 
       });
   }
 
@@ -104,9 +105,7 @@ export class VehicleFormComponent implements OnInit {
     if(this.vehicle.id) {
       this.vehicleService.updateVehicle(this.vehicle)
         .subscribe(x => {
-          console.log(x);
-          
-          this.toastrService.success('Success', 'haha', {
+          this.toastrService.success('Vehicle is updated successfully!', 'Success', {
             closeButton: true,
             timeOut: 5000
           });
@@ -114,7 +113,16 @@ export class VehicleFormComponent implements OnInit {
     }
     else {
       this.vehicleService.createVehicle(this.vehicle)
-      .subscribe(x => console.log(x));
+        .subscribe(x => console.log(x));
+    }
+  }
+
+  delete() {
+    if(confirm("Are you sure to delete the vehicle?")) {
+      this.vehicleService.deleteVehicle(this.vehicle.id)
+        .subscribe(x => {
+          this.router.navigate(['']);
+        });
     }
   }
 }
