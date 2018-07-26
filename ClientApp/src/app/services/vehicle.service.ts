@@ -2,12 +2,24 @@ import { SaveVehicle } from './../models/saveVehicle';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { forEach } from '../../../node_modules/@angular/router/src/utils/collection';
 
 @Injectable()
 export class VehicleService {
   private vehicleEndPoint = "/api/vehicles/";
 
   constructor(private http: HttpClient) { }
+
+  private convertIntoQueryString(filter) {
+    var parts = [];
+    for(let property in filter) {
+      let value = filter[property];
+      if(value != null && value != undefined)
+        parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));
+    }
+
+    return parts.join('&');
+  }
 
   getMakes(){
     return this.http.get('/api/makes').pipe(
@@ -21,8 +33,8 @@ export class VehicleService {
     );
   }
 
-  getVehicles() {
-    return this.http.get(this.vehicleEndPoint).pipe(
+  getVehicles(filter) {
+    return this.http.get(this.vehicleEndPoint + '?' + this.convertIntoQueryString(filter)).pipe(
       map(res => res)
     );
   }

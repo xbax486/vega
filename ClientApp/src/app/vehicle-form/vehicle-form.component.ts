@@ -105,7 +105,7 @@ export class VehicleFormComponent implements OnInit {
     if(this.vehicle.id) {
       this.vehicleService.updateVehicle(this.vehicle)
         .subscribe(x => {
-          this.toastrService.success('Vehicle is updated successfully!', 'Success', {
+          this.toastrService.success('The vehicle is updated successfully!', 'Success', {
             closeButton: true,
             timeOut: 5000
           });
@@ -113,7 +113,12 @@ export class VehicleFormComponent implements OnInit {
     }
     else {
       this.vehicleService.createVehicle(this.vehicle)
-        .subscribe(x => console.log(x));
+        .subscribe(x => {
+          this.toastrService.success('New vehicle is created successfully!', 'Success', {
+            closeButton: true,
+            timeOut: 5000
+          });
+        });
     }
   }
 

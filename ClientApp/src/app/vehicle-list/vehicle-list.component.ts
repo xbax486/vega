@@ -10,7 +10,6 @@ import { Vehicle } from '../models/vehicle';
 })
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
-  allVehicles: Vehicle[];
   makes: KeyValuePair[];
   filter: any = {};
   
@@ -23,20 +22,19 @@ export class VehicleListComponent implements OnInit {
         this.makes = makes;
       });
 
-    this.vehicleService.getVehicles()
+    this.populateVehicleList();
+  }
+
+  private populateVehicleList() {
+    this.vehicleService.getVehicles(this.filter)
       .subscribe(returnedVehicles => {
         let vehicles = returnedVehicles as Vehicle[];
-        this.vehicles = this.allVehicles = vehicles;
+        this.vehicles = vehicles;
       });
   }
 
   onFilterChange() {
-    var vehicles = this.allVehicles;
-
-    if(this.filter.makeId)
-      vehicles = this.allVehicles.filter(v => v.makeResource.id == this.filter.makeId);
-    
-    this.vehicles = vehicles;
+    this.populateVehicleList();
   }
 
   resetFilter() {
