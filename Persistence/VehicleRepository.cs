@@ -4,6 +4,9 @@ using vega.Core.Models;
 using vega.Core;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System;
+using vega.Extensions;
 
 namespace vega.Persistence
 {
@@ -29,6 +32,15 @@ namespace vega.Persistence
                 query = query.Where(v => v.Model.MakeId == vehicleQuery.MakeId.Value);
             if(vehicleQuery.ModelId.HasValue)
                 query = query.Where(v => v.ModelId == vehicleQuery.ModelId.Value);
+
+            // sort the vehicles if needed
+            var columnsMap = new Dictionary<string, Expression<Func<Vehicle, object>>>
+            {
+                ["make"] = v => v.Model.Make.Name,            
+                ["model"] = v => v.Model.Name,            
+                ["contactName"] = v => v.ContactName
+            };
+            query = query.ApplySorting(vehicleQuery, columnsMap);
 
             return await query.ToListAsync();
         }
