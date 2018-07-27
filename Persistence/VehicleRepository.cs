@@ -42,6 +42,8 @@ namespace vega.Persistence
             };
             query = query.ApplySorting(vehicleQuery, columnsMap);
 
+            query = query.ApplyPaging(vehicleQuery);
+
             return await query.ToListAsync();
         }
 
