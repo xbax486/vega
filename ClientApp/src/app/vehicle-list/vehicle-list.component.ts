@@ -11,7 +11,9 @@ import { Vehicle } from '../models/vehicle';
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
   makes: KeyValuePair[];
-  query: any = {};
+  query: any = {
+    pageSize: 3
+  };
   columns = [
     { title: 'Id' },
     { title: 'Make', key: 'make', isSortable: true },
@@ -22,6 +24,14 @@ export class VehicleListComponent implements OnInit {
 
   constructor(private vehicleService: VehicleService) { }
 
+  private populateVehicleList() {
+    this.vehicleService.getVehicles(this.query)
+      .subscribe(returnedVehicles => {
+        let vehicles = returnedVehicles as Vehicle[];
+        this.vehicles = vehicles;
+      });
+  }
+
   ngOnInit() {
     this.vehicleService.getMakes()
       .subscribe(returnedMakes => {
@@ -30,14 +40,6 @@ export class VehicleListComponent implements OnInit {
       });
 
     this.populateVehicleList();
-  }
-
-  private populateVehicleList() {
-    this.vehicleService.getVehicles(this.query)
-      .subscribe(returnedVehicles => {
-        let vehicles = returnedVehicles as Vehicle[];
-        this.vehicles = vehicles;
-      });
   }
 
   onFilterChange() {
@@ -57,6 +59,11 @@ export class VehicleListComponent implements OnInit {
       this.query.isSortAscending = true;
     }
     
+    this.populateVehicleList();
+  }
+
+  onPageChange(page) {
+    this.query.page = page; 
     this.populateVehicleList();
   }
 }
