@@ -9,10 +9,13 @@ import { Vehicle } from '../models/vehicle';
   styleUrls: ['./vehicle-list.component.css']
 })
 export class VehicleListComponent implements OnInit {
+  private readonly PAGE_SIZE = 3;
+
   vehicles: Vehicle[];
   makes: KeyValuePair[];
+  queryResult: any = {};
   query: any = {
-    pageSize: 3
+    pageSize: this.PAGE_SIZE
   };
   columns = [
     { title: 'Id' },
@@ -26,10 +29,7 @@ export class VehicleListComponent implements OnInit {
 
   private populateVehicleList() {
     this.vehicleService.getVehicles(this.query)
-      .subscribe(returnedVehicles => {
-        let vehicles = returnedVehicles as Vehicle[];
-        this.vehicles = vehicles;
-      });
+      .subscribe(queryResult => this.queryResult = queryResult);
   }
 
   ngOnInit() {
@@ -43,11 +43,15 @@ export class VehicleListComponent implements OnInit {
   }
 
   onFilterChange() {
+    this.query.page = 1; 
     this.populateVehicleList();
   }
 
   resetFilter() {
-    this.query = {};
+    this.query = {
+      page: 1,
+      pageSize: this.PAGE_SIZE
+    };
     this.onFilterChange();
   }
 
