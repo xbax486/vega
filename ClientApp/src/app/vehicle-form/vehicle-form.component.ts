@@ -1,4 +1,3 @@
-import { Contact } from './../models/contact';
 import { Component, OnInit } from '@angular/core';
 import { VehicleService } from '../services/vehicle.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -34,12 +33,12 @@ export class VehicleFormComponent implements OnInit {
   constructor(
     private vehicleService: VehicleService,
     private router: Router,
-    private activatedRoute: ActivatedRoute, 
+    private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService) {
-      this.activatedRoute.params.subscribe(param => {
-        let id = +param['id'];
-        this.vehicle.id = !isNaN(id) ? id : this.vehicle.id; 
-      });
+    this.activatedRoute.params.subscribe(param => {
+      let id = +param['id'] || 0;
+      this.vehicle.id = !isNaN(id) ? id : this.vehicle.id;
+    });
   }
 
   ngOnInit() {
@@ -48,7 +47,7 @@ export class VehicleFormComponent implements OnInit {
       this.vehicleService.getFeatures()
     ];
 
-    if(this.vehicle.id) {
+    if (this.vehicle.id) {
       sources.push(this.vehicleService.getVehicle(this.vehicle.id));
     }
 
@@ -57,16 +56,16 @@ export class VehicleFormComponent implements OnInit {
         this.makes = data[0];
         this.features = data[1];
 
-        if(this.vehicle.id) {
+        if (this.vehicle.id) {
           let vehicle = data[2] as Vehicle;
           this.setVehicle(vehicle);
           this.populateModels();
         }
-      }, 
-      error => {
-        if(error.status == 404)
-          this.router.navigate(['']);
-      });
+      },
+        error => {
+          if (error.status == 404)
+            this.router.navigate(['']);
+        });
   }
 
   private setVehicle(vehicle: Vehicle) {
@@ -102,32 +101,18 @@ export class VehicleFormComponent implements OnInit {
   }
 
   submit() {
-    if(this.vehicle.id) {
-      this.vehicleService.updateVehicle(this.vehicle)
-        .subscribe(x => {
-          this.toastrService.success('The vehicle is updated successfully!', 'Success', {
-            closeButton: true,
-            timeOut: 5000
-          });
-        });
-    }
-    else {
-      this.vehicleService.createVehicle(this.vehicle)
-        .subscribe(x => {
-          this.toastrService.success('New vehicle is created successfully!', 'Success', {
-            closeButton: true,
-            timeOut: 5000
-          });
-        });
-    }
-  }
+    var result$ = this.vehicle.id ?
+      this.vehicleService.updateVehicle(this.vehicle) : this.vehicleService.createVehicle(this.vehicle);
+    result$.subscribe(returnedVehicle => {
+      this.toastrService.success('Data was sucessfully saved.!', 'Success', {
+        closeButton: true,
+        timeOut: 5000
+      });
 
-  delete() {
-    if(confirm("Are you sure to delete the vehicle?")) {
-      this.vehicleService.deleteVehicle(this.vehicle.id)
-        .subscribe(x => {
-          this.router.navigate(['']);
-        });
-    }
+      let vehicle = returnedVehicle as Vehicle;
+      console.log(vehicle);
+      
+      this.router.navigate(['/vehicles/', vehicle.id]);
+    });
   }
 }
