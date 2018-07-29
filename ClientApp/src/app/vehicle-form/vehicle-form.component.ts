@@ -36,7 +36,7 @@ export class VehicleFormComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService) {
     this.activatedRoute.params.subscribe(param => {
-      let id = +param['id'] || 0;
+      let id = +param['id'];
       this.vehicle.id = !isNaN(id) ? id : this.vehicle.id;
     });
   }
