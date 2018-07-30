@@ -1,3 +1,4 @@
+import { BrowserXhr } from '@angular/http';
 import { AppErrorHandler } from './app.error-handler';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
@@ -20,6 +21,8 @@ import { PaginationComponent } from './pagination/pagination.component';
 
 import { VehicleService } from './services/vehicle.service';
 import { PhotoService } from "./services/photo.service";
+import { ProgressService } from './services/progress.service';
+import { BrowserXhrWithProgressService } from './services/progress.service';
 
 @NgModule({
   declarations: [
@@ -52,8 +55,10 @@ import { PhotoService } from "./services/photo.service";
   ],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler },
+    { provide: BrowserXhr, useClass: BrowserXhrWithProgressService },
     VehicleService,
-    PhotoService
+    PhotoService,
+    ProgressService
   ],
   bootstrap: [AppComponent]
 })

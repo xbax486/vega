@@ -2,6 +2,7 @@ import { PhotoService } from './../services/photo.service';
 import { VehicleService } from './../services/vehicle.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ProgressService } from '../services/progress.service';
 
 @Component({
   selector: 'app-vehicle-details',
@@ -18,7 +19,8 @@ export class VehicleDetailsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private vehicleService: VehicleService, 
-    private photoService: PhotoService) {
+    private photoService: PhotoService, 
+    private progressService: ProgressService) {
     this.activatedRoute.params.subscribe(param => {
       this.vehicleId = +param['id'];
       if (isNaN(this.vehicleId) || this.vehicleId <= 0) {
@@ -57,6 +59,10 @@ export class VehicleDetailsComponent implements OnInit {
 
   uploadPhoto() {
     var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
+
+    this.progressService.uploadProgress
+      .subscribe(progress => console.log(progress));
+
     this.photoService.uploadPhoto(this.vehicleId, nativeElement.files[0])
       .subscribe(photo => this.photos.push(photo));
   }
