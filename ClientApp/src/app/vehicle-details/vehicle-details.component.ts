@@ -1,9 +1,10 @@
 import { PhotoService } from './../services/photo.service';
 import { VehicleService } from './../services/vehicle.service';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject, Injector } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProgressService } from '../services/progress.service';
 import { HttpEventType } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-vehicle-details',
@@ -22,7 +23,8 @@ export class VehicleDetailsComponent implements OnInit {
     private router: Router,
     private vehicleService: VehicleService,
     private photoService: PhotoService,
-    private progressService: ProgressService) {
+    private progressService: ProgressService, 
+    @Inject(Injector) private injector: Injector) {
     this.activatedRoute.params.subscribe(param => {
       this.vehicleId = +param['id'];
       if (isNaN(this.vehicleId) || this.vehicleId <= 0) {
@@ -30,6 +32,11 @@ export class VehicleDetailsComponent implements OnInit {
         return;
       }
     });
+  }
+
+  // Need to get ToastrService from injector rather than constructor injection to avoid cyclic dependency error
+  private get toastrService(): ToastrService {
+    return this.injector.get(ToastrService);
   }
 
   ngOnInit() {
@@ -61,15 +68,25 @@ export class VehicleDetailsComponent implements OnInit {
 
   uploadPhoto() {
     var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
+    var file = nativeElement.files[0];
+    nativeElement.value = '';
 
-    this.photoService.uploadPhoto(this.vehicleId, nativeElement.files[0])
-      .subscribe(event => {
-        this.progress = this.progressService.checkProgress(event);
-        
-        if(event.type === HttpEventType.Response) {
-          this.photos.push(this.progress.photo);
-          this.progress = null;  
+    this.photoService.uploadPhoto(this.vehicleId, file)
+      .subscribe(
+        event => {
+          this.progress = this.progressService.checkProgress(event);
+
+          if (event.type === HttpEventType.Response) {
+            this.photos.push(this.progress.photo);
+            this.progress = null;
+          }
+        },
+        error => {
+          this.toastrService.error(error.error, 'Error', {
+            closeButton: true,
+            timeOut: 5000
+          });
         }
-      });
+      );
   }
 }

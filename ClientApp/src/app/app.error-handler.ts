@@ -10,13 +10,14 @@ export class AppErrorHandler implements ErrorHandler {
     }
     
     handleError(error: any): void {
-        if(isDevMode)
-            throw error;
         this.ngZone.run(() => {
-            this.toastrService.error(error.statusText, 'Error', {
+            this.toastrService.error(error.error, 'Error', {
                 closeButton: true,
                 timeOut: 5000
             });
         });
+
+        if(isDevMode)
+            throw error;
     }
 }
