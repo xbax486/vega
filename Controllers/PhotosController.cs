@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,8 @@ namespace vega.Controllers
     [Route("/api/vehicles/{vehicleId}/photos")]
     public class PhotosController : Controller
     {
+        private readonly int MAX_FILE_SIZE = 1 * 1024 * 1024;
+        private readonly string[] ACCEPTED_FILE_TYPES = new[] { ".jpg", "jpeg", ".png" };
         private readonly IHostingEnvironment host;
         private readonly IVehicleRepository repository;
         private readonly IUnitOfWork unitOfWork;
@@ -34,11 +37,22 @@ namespace vega.Controllers
             if (vehicle == null)
                 return NotFound();
 
+            if(file == null)
+                return BadRequest("Not file is uploaded!");
+            if(file.Length == 0)
+                return BadRequest("Please upload a non-empty file!");
+            if(file.Length > MAX_FILE_SIZE)
+                return BadRequest("Please upload a file with maximum size of 1GB!");
+
+            var fileExtension = Path.GetExtension(file.FileName);
+            if(!ACCEPTED_FILE_TYPES.Any(type => type == fileExtension))
+                return BadRequest("Please upload an image with extensions ['.jpg', 'jpeg', '.png']!");
+
             var uploadFoldersPath = Path.Combine(host.WebRootPath, "uploads");
             if (!Directory.Exists(uploadFoldersPath))
                 Directory.CreateDirectory(uploadFoldersPath);
 
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var fileName = Guid.NewGuid().ToString() + fileExtension;
             var filePath = Path.Combine(uploadFoldersPath, fileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
