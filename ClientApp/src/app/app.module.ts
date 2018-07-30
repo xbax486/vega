@@ -19,6 +19,7 @@ import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.compo
 import { PaginationComponent } from './pagination/pagination.component';
 
 import { VehicleService } from './services/vehicle.service';
+import { PhotoService } from "./services/photo.service";
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { VehicleService } from './services/vehicle.service';
   ],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler },
-    VehicleService
+    VehicleService,
+    PhotoService
   ],
   bootstrap: [AppComponent]
 })

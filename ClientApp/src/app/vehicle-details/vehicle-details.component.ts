@@ -1,5 +1,6 @@
+import { PhotoService } from './../services/photo.service';
 import { VehicleService } from './../services/vehicle.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -8,13 +9,15 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./vehicle-details.component.css']
 })
 export class VehicleDetailsComponent implements OnInit {
+  @ViewChild('fileInput') fileInput: ElementRef;
   vehicle: any;
   vehicleId: number;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private vehicleService: VehicleService) {
+    private vehicleService: VehicleService, 
+    private photoService: PhotoService) {
     this.activatedRoute.params.subscribe(param => {
       this.vehicleId = +param['id'];
       if (isNaN(this.vehicleId) || this.vehicleId <= 0) {
@@ -46,4 +49,9 @@ export class VehicleDetailsComponent implements OnInit {
     }
   }
 
+  uploadPhoto() {
+    var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
+    this.photoService.uploadPhoto(this.vehicleId, nativeElement.files[0])
+      .subscribe(x => console.log(x));
+  }
 }
