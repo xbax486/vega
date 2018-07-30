@@ -22,7 +22,6 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { VehicleService } from './services/vehicle.service';
 import { PhotoService } from "./services/photo.service";
 import { ProgressService } from './services/progress.service';
-import { BrowserXhrWithProgressService } from './services/progress.service';
 
 @NgModule({
   declarations: [
@@ -55,7 +54,6 @@ import { BrowserXhrWithProgressService } from './services/progress.service';
   ],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler },
-    { provide: BrowserXhr, useClass: BrowserXhrWithProgressService },
     VehicleService,
     PhotoService,
     ProgressService

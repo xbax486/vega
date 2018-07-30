@@ -3,6 +3,7 @@ import { VehicleService } from './../services/vehicle.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProgressService } from '../services/progress.service';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-vehicle-details',
@@ -14,12 +15,13 @@ export class VehicleDetailsComponent implements OnInit {
   vehicle: any;
   vehicleId: number;
   photos: any[];
+  progress: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private vehicleService: VehicleService, 
-    private photoService: PhotoService, 
+    private vehicleService: VehicleService,
+    private photoService: PhotoService,
     private progressService: ProgressService) {
     this.activatedRoute.params.subscribe(param => {
       this.vehicleId = +param['id'];
@@ -49,7 +51,7 @@ export class VehicleDetailsComponent implements OnInit {
   }
 
   delete() {
-    if(confirm("Are you sure to delete the vehicle?")) {
+    if (confirm("Are you sure to delete the vehicle?")) {
       this.vehicleService.deleteVehicle(this.vehicle.id)
         .subscribe(x => {
           this.router.navigate(['']);
@@ -60,10 +62,14 @@ export class VehicleDetailsComponent implements OnInit {
   uploadPhoto() {
     var nativeElement: HTMLInputElement = this.fileInput.nativeElement;
 
-    this.progressService.uploadProgress
-      .subscribe(progress => console.log(progress));
-
     this.photoService.uploadPhoto(this.vehicleId, nativeElement.files[0])
-      .subscribe(photo => this.photos.push(photo));
+      .subscribe(event => {
+        this.progress = this.progressService.checkProgress(event);
+        
+        if(event.type === HttpEventType.Response) {
+          this.photos.push(this.progress.photo);
+          this.progress = null;  
+        }
+      });
   }
 }
