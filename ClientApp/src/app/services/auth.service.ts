@@ -8,7 +8,7 @@ import { JwtHelper } from "angular2-jwt";
 
 @Injectable()
 export class AuthService {
-  profile: any;
+  profile: any = {};
   private roles: string[] = [];
 
   auth0 = new auth0.WebAuth({
@@ -21,13 +21,7 @@ export class AuthService {
   });
 
   constructor(public router: Router) {
-    var token = localStorage.getItem('token');
-    
-    if (token) {
-      var jwtHelper = new JwtHelper();
-      var decodedToken = jwtHelper.decodeToken(token);
-      this.roles = decodedToken['https://abvega.com/roles'];
-    }
+    this.handleAuthentication();
   }
 
   public login(): void {
@@ -37,7 +31,7 @@ export class AuthService {
   public logout(): void {
     // Remove tokens and expiry time from localStorage
     localStorage.removeItem('access_token');
-    localStorage.removeItem('token');
+    localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('profile');
     this.profile = null;
@@ -54,22 +48,18 @@ export class AuthService {
   }
 
   public handleAuthentication(): void {
-    this.profile = JSON.parse(localStorage.getItem('profile'));
-
     this.auth0.parseHash((error, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';
         this.setSession(authResult);
-        this.getProfile((error, profile) => { console.log('Callback function'); });
-
-        var jwtHelper = new JwtHelper();
-        var decodedToken = jwtHelper.decodeToken(authResult.idToken);
-        this.roles = decodedToken['https://abvega.com/roles'];
-      
+        this.getProfile((error, profile) => {});
         this.router.navigate(['']);
       }
       else if (error) {
         this.router.navigate(['']);
+      }
+      else {
+        this.readUserDetailsFromLocalStorage();
       }
     });
   }
@@ -80,28 +70,36 @@ export class AuthService {
       throw new Error('Access token must exist to fetch profile');
     }
 
-    const self = this;
     this.auth0.client.userInfo(accessToken, (error, profile) => {
-      if (error)
-        throw error
-      if (profile) {
-        localStorage.setItem('profile', JSON.stringify(profile));
-        self.profile = profile;
+      if (error) {
+        throw error;
       }
+      localStorage.setItem('profile', JSON.stringify(profile));
+      this.readUserDetailsFromLocalStorage();
       callback(error, profile);
     });
-  }
-
-  private setSession(authResult): void {
-    // Set the time that the Access Token will expire at
-    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-    localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('token', authResult.idToken);
-    localStorage.setItem('expires_at', expiresAt);
   }
 
   public isInRole(role) {
     return this.roles.indexOf(role) > -1;
   }
 
+  private setSession(authResult): void {
+    // Set the time that the Access Token will expire at
+    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+    localStorage.setItem('access_token', authResult.accessToken);
+    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('expires_at', expiresAt);
+  }
+
+  private readUserDetailsFromLocalStorage() {
+    this.profile = JSON.parse(localStorage.getItem('profile'));
+
+    var id_token = localStorage.getItem('id_token');
+    if (id_token) {
+      var jwtHelper = new JwtHelper();
+      var decodedToken = jwtHelper.decodeToken(id_token);
+      this.roles = decodedToken['https://abvega.com/roles'];
+    }
+  }
 }
