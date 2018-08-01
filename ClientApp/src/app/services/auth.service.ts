@@ -81,7 +81,9 @@ export class AuthService {
   }
 
   public isInRole(role) {
-    return this.roles.indexOf(role) > -1;
+    if(this.roles && this.roles.length > 0)
+      return this.roles.indexOf(role) > -1;
+    return false;
   }
 
   private setSession(authResult): void {

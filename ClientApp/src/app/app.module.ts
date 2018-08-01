@@ -27,6 +27,10 @@ import { PhotoService } from "./services/photo.service";
 import { ProgressService } from './services/progress.service';
 import { AuthService } from "./services/auth.service";
 
+//Guards
+import { AuthGuard } from './services/auth-guard.service';
+import { AdminAuthGuard } from './services/admin-auth-guard.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,7 +57,7 @@ import { AuthService } from "./services/auth.service";
       { path: 'vehicles/edit/:id', component: VehicleFormComponent },
       { path: 'vehicles/:id', component: VehicleDetailsComponent },
       { path: 'vehicles', component: VehicleListComponent },
-      { path: 'admin', component: AdminComponent },
+      { path: 'admin', component: AdminComponent, canActivate: [ AdminAuthGuard ] },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent }
     ])
@@ -63,7 +67,9 @@ import { AuthService } from "./services/auth.service";
     VehicleService,
     PhotoService,
     ProgressService,
-    AuthService
+    AuthService,
+    AuthGuard,
+    AdminAuthGuard
   ],
   bootstrap: [AppComponent]
 })
