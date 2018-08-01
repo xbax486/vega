@@ -22,6 +22,7 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { VehicleService } from './services/vehicle.service';
 import { PhotoService } from "./services/photo.service";
 import { ProgressService } from './services/progress.service';
+import { AuthService } from "./services/auth.service";
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { ProgressService } from './services/progress.service';
     { provide: ErrorHandler, useClass: AppErrorHandler },
     VehicleService,
     PhotoService,
-    ProgressService
+    ProgressService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })
