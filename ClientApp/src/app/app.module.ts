@@ -1,13 +1,15 @@
-// Modules
+// Modules and thrid party libraries
 import { AppErrorHandler } from './app.error-handler';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpModule } from "@angular/http";
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { JwtModule } from '@auth0/angular-jwt';
 
 // Components
 import { AppComponent } from './app.component';
@@ -46,6 +48,7 @@ import { AdminAuthGuard } from './services/admin-auth-guard.service';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    HttpModule,
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
@@ -57,10 +60,19 @@ import { AdminAuthGuard } from './services/admin-auth-guard.service';
       { path: 'vehicles/edit/:id', component: VehicleFormComponent },
       { path: 'vehicles/:id', component: VehicleDetailsComponent },
       { path: 'vehicles', component: VehicleListComponent },
-      { path: 'admin', component: AdminComponent, canActivate: [ AdminAuthGuard ] },
+      { path: 'admin', component: AdminComponent, canActivate: [AdminAuthGuard] },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent }
-    ])
+    ]),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => {
+          return localStorage.getItem('access_token');
+        },
+        whitelistedDomains: ['https://localhost:5001/'],
+        blacklistedRoutes: []
+      }
+    })
   ],
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler },

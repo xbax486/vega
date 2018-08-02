@@ -3,7 +3,7 @@ export const AUTH_CONFIG: AuthConfig = {
     domain: 'abvegaproject.au.auth0.com',
     callbackURL: 'http://localhost:5001/callback',
     responseType: 'token id_token',
-    audience: 'https://abvegaproject.au.auth0.com/userinfo',
+    audience: 'https://api.vega.com',
     redirectUri: 'https://localhost:5001/',
     scope: 'openid profile email'
 };

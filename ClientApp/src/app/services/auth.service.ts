@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import * as auth0 from 'auth0-js';
 import { AUTH_CONFIG } from "./auth0-variables";
-import { JwtHelper } from "angular2-jwt";
+import { JwtHelperService } from "@auth0/angular-jwt";
 
 (window as any).global = window;
 
@@ -99,7 +99,7 @@ export class AuthService {
 
     var id_token = localStorage.getItem('id_token');
     if (id_token) {
-      var jwtHelper = new JwtHelper();
+      var jwtHelper = new JwtHelperService();
       var decodedToken = jwtHelper.decodeToken(id_token);
       this.roles = decodedToken['https://abvega.com/roles'];
     }

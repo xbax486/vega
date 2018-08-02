@@ -11,7 +11,8 @@ export class AppErrorHandler implements ErrorHandler {
     
     handleError(error: any): void {
         this.ngZone.run(() => {
-            this.toastrService.error(error.error, 'Error', {
+            let message = error.error ? error.error : error.message ? error.message : 'Opps! Something wrong happens.'
+            this.toastrService.error(message, 'Error', {
                 closeButton: true,
                 timeOut: 5000
             });
