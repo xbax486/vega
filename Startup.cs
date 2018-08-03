@@ -36,6 +36,8 @@ namespace vega
 
             services.AddTransient<IPhotoService, PhotoService>();
 
+            services.AddTransient<IPhotoStorage, FileSystemPhotoStorage>();
+
             services.AddAutoMapper();
 
             services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
