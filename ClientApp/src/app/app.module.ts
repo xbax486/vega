@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { JwtModule } from '@auth0/angular-jwt';
+import { ChartModule } from 'angular2-chartjs';
 
 // Components
 import { AppComponent } from './app.component';
@@ -52,6 +53,7 @@ import { AdminAuthGuard } from './services/admin-auth-guard.service';
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
+    ChartModule,
     TabsModule.forRoot(),
     ToastrModule.forRoot(),
     RouterModule.forRoot([
