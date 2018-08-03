@@ -101,7 +101,7 @@ export class AuthService {
     if (id_token) {
       var jwtHelper = new JwtHelperService();
       var decodedToken = jwtHelper.decodeToken(id_token);
-      this.roles = decodedToken['https://abvega.com/roles'];
+      this.roles = decodedToken['https://abvega.com/roles'] || [];
     }
   }
 }
