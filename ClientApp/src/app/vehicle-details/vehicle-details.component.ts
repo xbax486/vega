@@ -1,3 +1,4 @@
+import { AuthService } from './../services/auth.service';
 import { PhotoService } from './../services/photo.service';
 import { VehicleService } from './../services/vehicle.service';
 import { Component, OnInit, ViewChild, ElementRef, Inject, Injector } from '@angular/core';
@@ -19,12 +20,13 @@ export class VehicleDetailsComponent implements OnInit {
   progress: any;
 
   constructor(
+    @Inject(Injector) private injector: Injector,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private vehicleService: VehicleService,
     private photoService: PhotoService,
-    private progressService: ProgressService, 
-    @Inject(Injector) private injector: Injector) {
+    private progressService: ProgressService,
+    private authService: AuthService) {
     this.activatedRoute.params.subscribe(param => {
       this.vehicleId = +param['id'];
       if (isNaN(this.vehicleId) || this.vehicleId <= 0) {

@@ -1,3 +1,4 @@
+import { AuthService } from './../services/auth.service';
 import { KeyValuePair } from './../models/keyValuePair';
 import { VehicleService } from './../services/vehicle.service';
 import { Component, OnInit } from '@angular/core';
@@ -25,7 +26,9 @@ export class VehicleListComponent implements OnInit {
     {}
   ];
 
-  constructor(private vehicleService: VehicleService) { }
+  constructor(
+    private vehicleService: VehicleService, 
+    private authService: AuthService) { }
 
   private populateVehicleList() {
     this.vehicleService.getVehicles(this.query)
