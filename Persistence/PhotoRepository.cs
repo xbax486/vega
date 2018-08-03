@@ -22,5 +22,10 @@ namespace vega.Persistence
                 .Where(p => p.VehicleId == vehicleId)
                 .ToListAsync();
         }
+
+        public void Remove(Photo photo)
+        {
+            context.Photos.Remove(photo);
+        }
     }
 }

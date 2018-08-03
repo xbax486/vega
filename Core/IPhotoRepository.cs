@@ -7,5 +7,7 @@ namespace vega.Core
     public interface IPhotoRepository
     {
         Task<ICollection<Photo>> GetPhotos(int vehicleId);
+
+        void Remove(Photo photo);
     }
 }
