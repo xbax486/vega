@@ -2,18 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using vega.Core.Models;
 
 namespace vega.Extensions
 {
     public static class IQueryableExtensions
     {
-        public static IQueryable<T> ApplySorting<T>(this IQueryable<T> query, IQueryObject queryObject, 
-            Dictionary<string, Expression<Func<T, object>>> columnsMap) 
+        public static IQueryable<Vehicle> ApplyFiltering(this IQueryable<Vehicle> query, VehicleQuery queryObject)
+        {
+            if (queryObject.MakeId.HasValue)
+                query = query.Where(v => v.Model.MakeId == queryObject.MakeId.Value);
+            if (queryObject.ModelId.HasValue)
+                query = query.Where(v => v.ModelId == queryObject.ModelId.Value);
+            return query;
+        }
+
+        public static IQueryable<T> ApplySorting<T>(this IQueryable<T> query, IQueryObject queryObject,
+            Dictionary<string, Expression<Func<T, object>>> columnsMap)
         {
             if (String.IsNullOrWhiteSpace(queryObject.SortBy) || !columnsMap.ContainsKey(queryObject.SortBy))
                 return query;
 
-            if(queryObject.isSortAscending)
+            if (queryObject.isSortAscending)
                 query = query.OrderBy(columnsMap[queryObject.SortBy]);
             else
                 query.OrderByDescending(columnsMap[queryObject.SortBy]);
