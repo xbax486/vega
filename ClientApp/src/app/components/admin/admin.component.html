@@ -1,2 +1,2 @@
 <h1>Admin</h1>
-<chart type="pie" [data]="data"></chart>
+<chart type="pie" [data]="data" *ngIf="data.labels.length > 0 && data.datasets[0].data.length > 0"></chart>
