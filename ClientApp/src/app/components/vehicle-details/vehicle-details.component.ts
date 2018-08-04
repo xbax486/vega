@@ -1,11 +1,11 @@
-import { AuthService } from './../services/auth.service';
-import { PhotoService } from './../services/photo.service';
-import { VehicleService } from './../services/vehicle.service';
+import { PhotoService } from '../../services/photo/photo.service';
+import { VehicleService } from '../../services/vehicle/vehicle.service';
 import { Component, OnInit, ViewChild, ElementRef, Inject, Injector } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ProgressService } from '../services/progress.service';
+import { ProgressService } from '../../services/progress/progress.service';
 import { HttpEventType } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-vehicle-details',

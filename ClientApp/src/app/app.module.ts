@@ -13,26 +13,26 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { ChartModule } from 'angular2-chartjs';
 
 // Components
-import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
-import { VehicleListComponent } from './vehicle-list/vehicle-list.component';
-import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.component';
-import { PaginationComponent } from './pagination/pagination.component';
-import { AdminComponent } from './admin/admin.component';
+import { AppComponent } from './components/app/app.component';
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
+import { HomeComponent } from './components/home/home.component';
+import { CounterComponent } from './components/counter/counter.component';
+import { FetchDataComponent } from './components/fetch-data/fetch-data.component';
+import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.component';
+import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
+import { VehicleDetailsComponent } from './components/vehicle-details/vehicle-details.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
+import { AdminComponent } from './components/admin/admin.component';
 
 // Services
-import { VehicleService } from './services/vehicle.service';
-import { PhotoService } from "./services/photo.service";
-import { ProgressService } from './services/progress.service';
-import { AuthService } from "./services/auth.service";
+import { VehicleService } from './services/vehicle/vehicle.service';
+import { PhotoService } from "./services/photo/photo.service";
+import { ProgressService } from './services/progress/progress.service';
+import { AuthService } from "./services/auth/auth.service";
 
 //Guards
-import { AuthGuard } from './services/auth-guard.service';
-import { AdminAuthGuard } from './services/admin-auth-guard.service';
+import { AuthGuard } from './guards/auth/auth-guard.service';
+import { AdminAuthGuard } from './guards/auth/admin-auth-guard.service';
 
 @NgModule({
   declarations: [

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { VehicleService } from '../services/vehicle.service';
+import { VehicleService } from '../../services/vehicle/vehicle.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { forkJoin } from "rxjs/observable/forkJoin";
-import { SaveVehicle } from "../models/saveVehicle";
-import { Vehicle } from "../models/vehicle";
+import { SaveVehicle } from "../../models/saveVehicle";
+import { Vehicle } from "../../models/vehicle";
 import * as _ from "underscore";
 import { ToastrService } from 'ngx-toastr';
 

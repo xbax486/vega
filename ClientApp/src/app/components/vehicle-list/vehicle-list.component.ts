@@ -1,8 +1,8 @@
-import { AuthService } from './../services/auth.service';
-import { KeyValuePair } from './../models/keyValuePair';
-import { VehicleService } from './../services/vehicle.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { KeyValuePair } from '../../models/KeyValuePair';
+import { VehicleService } from '../../services/vehicle/vehicle.service';
 import { Component, OnInit } from '@angular/core';
-import { Vehicle } from '../models/vehicle';
+import { Vehicle } from '../../models/vehicle';
 
 @Component({
   selector: 'app-vehicle-list',
