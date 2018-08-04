@@ -8,6 +8,7 @@ using vega.Core.Models;
 using vega.Core;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace vega.Controllers
 {
@@ -37,6 +38,16 @@ namespace vega.Controllers
             var vehicleQuery = mapper.Map<VehicleQueryResource, VehicleQuery>(vehicleQueryResource);
             var queryResult = await iVehicleRepository.GetVehicles(vehicleQuery);
             return mapper.Map<QueryResult<Vehicle>, QueryResultResource<VehicleResource>>(queryResult);
+        }
+
+        [HttpGet("make/{makeId}")]
+        public async Task<IEnumerable<VehicleResource>> GetVehiclesByMakes(int makeId)
+        {
+            var vehicleQueryResource = new VehicleQueryResource();
+            var vehicleQuery = mapper.Map<VehicleQueryResource, VehicleQuery>(vehicleQueryResource);
+            var queryResult = await iVehicleRepository.GetVehicles(vehicleQuery);
+            var vehiclesOfMake = queryResult.Items.Where(vehicle => vehicle.Model.MakeId == makeId);
+            return mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleResource>>(vehiclesOfMake);;
         }
 
         [HttpGet("{id}")]
